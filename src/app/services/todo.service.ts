@@ -65,7 +65,6 @@ export class TodoService {
 
   async updateTodo(id: string, todo: IUpdateTodo) {
     try {
-      console.log(111, todo);
       const response = await fetch(`${BASE_URL}/todos/${id}`, {
         method: 'PATCH',
         headers: {
@@ -74,7 +73,6 @@ export class TodoService {
         body: JSON.stringify(todo),
       });
       const json = (await response.json()) as any;
-      console.log(2222, json);
       const { data, message, details } = json;
       if (!response.ok) {
         return {
