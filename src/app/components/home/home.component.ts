@@ -64,6 +64,50 @@ type TodoItem = {
             class="bg-white border-2 border-gray-100 drop-shadow-md rounded-xl flex flex-row justify-between items-center text-xl font-medium"
           >
             <div class="flex flex-row flex-grow items-center px-8 py-4 hover:bg-gray-100 z-0">
+              <span class="flex gap-2 z-10 -ml-4 mr-4">
+                <button
+                  #checked
+                  class="text-gray-100 bg-gray-300 hover:text-green-100 hover:bg-green-500 rounded-full"
+                  (click)="onToggleTodoCheck($event, i, todo)"
+                  *ngIf="!todo.data.isCompleted"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.0"
+                    stroke="currentColor"
+                    class="w-10 h-10"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  #checked
+                  class="text-green-100 bg-green-500 hover:text-gray-100 hover:bg-gray-500  rounded-full"
+                  (click)="onToggleTodoCheck($event, i, todo)"
+                  *ngIf="todo.data.isCompleted"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.0"
+                    stroke="currentColor"
+                    class="w-10 h-10"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </button>
+              </span>
               <h1 class="flex-grow">
                 {{ todo.data.title }}
               </h1>
@@ -230,6 +274,16 @@ export class HomeComponent {
       title: todoItem.data.title,
       isCompleted: todoItem.data.isCompleted,
     });
+  }
+
+  async onToggleTodoCheck(event: MouseEvent, index: number, todoItem: TodoItem) {
+    todoItem.data.isCompleted = !todoItem.data.isCompleted;
+    this.editTodoItem = todoItem;
+    this.editTodoForm.setValue({
+      title: todoItem.data.title,
+      isCompleted: todoItem.data.isCompleted,
+    });
+    await this.onEditTodoSubmit();
   }
 
   async onRemoveTodoClick(event: MouseEvent, index: number) {
