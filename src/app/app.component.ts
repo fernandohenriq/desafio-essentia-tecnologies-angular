@@ -6,51 +6,19 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule],
   template: `
-    <main>
-      <a [routerLink]="['/']">
-        <header class="brand-name">
-          <img
-            class="brand-logo"
-            src="/assets/todo-logo.svg"
-            alt="logo"
-            aria-hidden="true"
-            height="64"
-          />
-          <h1>My To-Do Lists</h1>
-        </header>
-      </a>
-      <section class="content">
-        <router-outlet></router-outlet>
+    <div class="h-svh w-svw flex flex-col  bg-blue-800 text-slate-700">
+      <header class="flex justify-center px-4 py-6 text-white">
+        <a [routerLink]="['/']" class="text-decoration-none">
+          <span class="h1 text-7xl font-bold">Todo App</span>
+        </a>
+      </header>
+      <section class="h-full w-full pb-10 flex flex-col justify-start items-center">
+        <div class="container bg-white text-black h-full max-w-3xl rounded-3xl p-10">
+          <router-outlet></router-outlet>
+        </div>
       </section>
-    </main>
+    </div>
   `,
-  styles: `
-    :host {
-      --header-padding: 16px;
-      --content-padding: 32px;
-    }
-
-    a {
-      text-decoration: none;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background-color: var(--primary-color);
-      color: var(--accent-color);
-      font-weight: bold;
-      height: 60px;
-      padding: var(--header-padding);
-      padding-left: var(--content-padding);
-      padding-right: var(--content-padding);
-      box-shadow: 0px 5px 25px var(--shadow-color);
-    }
-
-    .content {
-      padding: var(--content-padding);
-    }
-  `,
+  styles: ``,
 })
 export class AppComponent {}
