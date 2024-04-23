@@ -1,51 +1,36 @@
-# HOMES-ANGULAR-EXAMPLE
+# desafio-essentia-tecnologies-angular
 
-This is an example of how to use Angular with the [Angular.io guide](https://angular.io/tutorial/first-app).
+## Instalação
 
-## Setup
+Para instalar o projeto, execute os seguintes comandos:
 
-- In root directory, install all the dependencies:
+```bash
+npm install
+```
 
-  ```
-  npm install
-  ```
+or
 
-  or
+```bash
+yarn
+```
 
-  ```
-  yarn
-  ```
+## Variáveis de ambiente
 
-- Now install globally `json-server` (if not already installed):
+No arquivo `src\environments\environment.ts` defina `apiUrl` com sua URL de API, exemplo:
 
-  ```
-  npm i -g json-server
-  ```
+```bash
+export const environment = {
+  ...
+  apiUrl: 'http://localhost:3001',
+};
+```
 
-  or
+## Execução
 
-  ```
-  yarn global add json-server
-  ```
+Para executar o projeto, execute os seguintes comandos:
 
-## Run
+```
+ng serve
+```
 
-- Run the following command with terminal in the root directory to start the `json-server` server:
-
-  ```
-  json-server --watch db.json
-  ```
-
-  - Open http://localhost:3000 in your browser to see the example.
-
-- Run the following command with another terminal in the root directory to start the application:
-
-  ```
-  ng serve
-  ```
-
-  - Open http://localhost:4200 in your browser to see the application.
-
-## Conclusion
-
-Well done, the application is running! 🚀
+- Abra o endereço `http://localhost:4200` no seu navegador para visualizar a aplicação.
