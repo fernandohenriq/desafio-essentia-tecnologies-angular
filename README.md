@@ -1,5 +1,7 @@
 # desafio-essentia-tecnologies-angular
 
+Backend [aqui](https://github.com/fernandohenriq/desafio-essentia-tecnologies).
+
 ## Instalação
 
 Para instalar o projeto, execute os seguintes comandos:
