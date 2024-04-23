@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 
+import { environment } from '../../environments/environment';
 import { Pagination } from '../interfaces/pagination.interface';
 import { ICreateTodo, ITodo, IUpdateTodo } from '../interfaces/todo.interface';
 import { ValidationError } from '../interfaces/validation-error.interface';
 
-const BASE_URL = 'http://localhost:3001';
+const apiUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ const BASE_URL = 'http://localhost:3001';
 export class TodoService {
   async createTodo(todo: ICreateTodo) {
     try {
-      const response = await fetch(`${BASE_URL}/todos`, {
+      const response = await fetch(`${apiUrl}/todos`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,7 +43,7 @@ export class TodoService {
     try {
       const { page = 1, limit = 10, search } = pagination || {};
       const response = await fetch(
-        `${BASE_URL}/todos?page=${page}&limit=${limit}${search ? `&title=${search}` : ''}`,
+        `${apiUrl}/todos?page=${page}&limit=${limit}${search ? `&title=${search}` : ''}`,
       );
       const json = (await response.json()) as any;
       const { data, message } = json;
@@ -65,7 +66,7 @@ export class TodoService {
 
   async updateTodo(id: string, todo: IUpdateTodo) {
     try {
-      const response = await fetch(`${BASE_URL}/todos/${id}`, {
+      const response = await fetch(`${apiUrl}/todos/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -94,7 +95,7 @@ export class TodoService {
 
   async deleteTodo(id: string) {
     try {
-      const response = await fetch(`${BASE_URL}/todos/${id}`, {
+      const response = await fetch(`${apiUrl}/todos/${id}`, {
         method: 'DELETE',
       });
       const { message } = (await response.json()) as any;
