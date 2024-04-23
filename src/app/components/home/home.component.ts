@@ -157,7 +157,7 @@ type TodoItem = {
       </div>
     </section>
     <app-modal
-      [show]="!!editTodoItem"
+      [show]="!!modalTodo"
       (confirm)="onEditTodoSubmit()"
       (cancel)="onModalCancel()"
       (shadowClick)="onModalCancel()"
@@ -173,7 +173,7 @@ type TodoItem = {
             formControlName="title"
             placeholder="Enter title"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:outline-none block w-full p-2.5"
-            *ngIf="!!editTodoItem?.data?.title"
+            *ngIf="!!modalTodo?.data?.title"
           />
         </form>
       </div>
@@ -190,7 +190,7 @@ export class HomeComponent {
 
   todoItems: TodoItem[] = [];
 
-  editTodoItem?: TodoItem;
+  modalTodo?: TodoItem;
 
   createTodoForm = new FormGroup({
     title: new FormControl(''),
@@ -206,7 +206,7 @@ export class HomeComponent {
   }
 
   async onGetTodos() {
-    const { data, message, error } = await this.todoService.getTodos({});
+    const { data, error } = await this.todoService.getTodos({});
     if (error || !data) {
       alert(error || 'Error getting todos');
       return;
@@ -239,21 +239,18 @@ export class HomeComponent {
       return;
     }
     const todoDataToUpdate = this.editTodoForm.value;
-    const { data, message, error, details } = await this.todoService.updateTodo(
-      this.editTodoItem?.data.id || '',
-      {
-        title: todoDataToUpdate.title || '',
-        isCompleted: todoDataToUpdate.isCompleted || false,
-      },
-    );
+    const { data, error } = await this.todoService.updateTodo(this.modalTodo?.data.id || '', {
+      title: todoDataToUpdate.title || '',
+      isCompleted: todoDataToUpdate.isCompleted || false,
+    });
     if (error || !data) {
       alert(error || 'Error updating todo');
       return;
     }
-    if (this.editTodoItem) {
-      Object.assign(this.editTodoItem.data, data);
+    if (this.modalTodo) {
+      Object.assign(this.modalTodo.data, data);
     }
-    this.editTodoItem = undefined;
+    this.modalTodo = undefined;
     this.editTodoForm.reset();
   }
 
@@ -263,13 +260,13 @@ export class HomeComponent {
   }
 
   onModalCancel() {
-    this.editTodoItem = undefined;
+    this.modalTodo = undefined;
   }
 
   onEditTodoClick(event: MouseEvent, index: number, todoItem: TodoItem) {
     event.preventDefault();
     event.stopPropagation();
-    this.editTodoItem = todoItem;
+    this.modalTodo = todoItem;
     this.editTodoForm.setValue({
       title: todoItem.data.title,
       isCompleted: todoItem.data.isCompleted,
@@ -278,18 +275,31 @@ export class HomeComponent {
 
   async onToggleTodoCheck(event: MouseEvent, index: number, todoItem: TodoItem) {
     todoItem.data.isCompleted = !todoItem.data.isCompleted;
-    this.editTodoItem = todoItem;
+    this.modalTodo = undefined;
     this.editTodoForm.setValue({
       title: todoItem.data.title,
       isCompleted: todoItem.data.isCompleted,
     });
-    await this.onEditTodoSubmit();
+    if (!this.editTodoForm.value?.title) {
+      alert('Title is required');
+      return;
+    }
+    const todoDataToUpdate = this.editTodoForm.value;
+    const { data, error } = await this.todoService.updateTodo(todoItem?.data.id || '', {
+      title: todoDataToUpdate.title || '',
+      isCompleted: todoDataToUpdate.isCompleted || false,
+    });
+    if (error || !data) {
+      alert(error || 'Error updating todo');
+      return;
+    }
+    this.editTodoForm.reset();
   }
 
   async onRemoveTodoClick(event: MouseEvent, index: number) {
     event.preventDefault();
     event.stopPropagation();
-    const { message, error } = await this.todoService.deleteTodo(this.todoItems[index].data.id);
+    const { error } = await this.todoService.deleteTodo(this.todoItems[index].data.id);
     if (error) {
       alert(error || 'Error deleting todo');
       return;
